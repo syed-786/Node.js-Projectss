@@ -1,4 +1,4 @@
-const User = require("../models/user").default;
+const User = require("../models/user");
 
 const getAllUsers = async (req, res) => {
   const allUsers = await User.find({});
@@ -19,10 +19,10 @@ const getUserById = async (req, res) => {
 const updateUserById = async (req, res) => {
   const userId = req.params.id;
   const userData = req.body;
-
+  console.log("req:", userData);
   try {
     const user = await User.findByIdAndUpdate(userId, userData);
-
+    console.log("users ", user);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -87,10 +87,34 @@ const replaceUserById = async (req, res) => {
   }
 };
 
+const createNewUser = async (req, res) => {
+  const newUser = req.body;
+  if (
+    !newUser ||
+    !newUser.firstName ||
+    !newUser.lastName ||
+    !newUser.email ||
+    !newUser.jobTitle ||
+    !newUser.gender
+  ) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
+  }
+
+  const result = await User.create(newUser);
+
+  return res.status(201).json({
+    message: "User added successfully",
+    userId: result._id,
+  });
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   updateUserById,
   deleteUserById,
   replaceUserById,
+  createNewUser,
 };

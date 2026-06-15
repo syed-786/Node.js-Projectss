@@ -5,10 +5,11 @@ const {
   updateUserById,
   deleteUserById,
   replaceUserById,
+  createNewUser,
 } = require("../controllers/user");
 const router = express.Router();
 
-router.get("/", getAllUsers);
+router.route("/").get(getAllUsers).post(createNewUser);
 
 router
   .route("/:id")
@@ -16,28 +17,5 @@ router
   .patch(updateUserById)
   .delete(deleteUserById)
   .put(replaceUserById);
-
-router.post("/", async (req, res) => {
-  const newUser = req.body;
-  if (
-    !newUser ||
-    !newUser.firstName ||
-    !newUser.lastName ||
-    !newUser.email ||
-    !newUser.jobTitle ||
-    !newUser.gender
-  ) {
-    return res.status(400).json({
-      message: "All fields are required",
-    });
-  }
-
-  const result = await User.create(newUser);
-
-  return res.status(201).json({
-    message: "User added successfully",
-    userId: result._id,
-  });
-});
 
 module.exports = router;
