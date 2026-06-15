@@ -41,9 +41,11 @@ const userSchema = new mongoose.Schema(
 // Create a model based on the schema
 const User = mongoose.model("user", userSchema);
 
+//Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Routes
 app.get("/users", async (req, res) => {
   const users = await User.find();
   const html = `
