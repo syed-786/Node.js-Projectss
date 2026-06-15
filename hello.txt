@@ -1,0 +1,2 @@
+Hello Node JSsssss
+this text is added by append file sync method
